@@ -17,7 +17,6 @@ from loguru import logger
 from loki_logger_handler.loki_logger_handler import LokiLoggerHandler,LoguruFormatter
 import pymysql
 import time
-from flask_apscheduler import APScheduler
 
 load_dotenv()
 app = Flask(__name__)
@@ -31,9 +30,6 @@ client = OpenAI(
     api_key=os.getenv('OPENAI_API_KEY'),
 )
 stripe.api_key = os.getenv('STRIPE_TEST_KEY')
-scheduler = APScheduler()
-scheduler.init_app(app)
-scheduler.start()
 
 loki_url = os.getenv("LOKI_URL")
 custom_handler = LokiLoggerHandler(url=loki_url, labels={"application": "flask-app"},timeout=10, defaultFormatter=LoguruFormatter(),)
@@ -118,10 +114,6 @@ class Feedback(db.Model):
 
 with app.app_context():
     db.create_all()
-
-@scheduler.task('cron', id='reset_free_predictions', month='*', day=1)
-def reset_free_predictions():
-    User.reset_free_predictions()
 
 def load_answers_data():
     with open('pred.json', 'r') as file:
