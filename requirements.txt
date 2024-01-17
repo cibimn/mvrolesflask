@@ -45,3 +45,4 @@ pymysql
 cryptography
 gunicorn
 Flask-APScheduler
+psycopg2-binary
