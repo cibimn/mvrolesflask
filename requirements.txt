@@ -44,3 +44,4 @@ zipp==3.17.0
 pymysql
 cryptography
 gunicorn
+Flask-APScheduler
